@@ -284,6 +284,32 @@ const translations = {
 const languageToggle = document.querySelector('#language-toggle');
 const themeToggle = document.querySelector('#theme-toggle');
 
+function setupPageLoader() {
+	const loader = document.createElement('div');
+	loader.className = 'site-loader';
+	loader.setAttribute('role', 'status');
+	loader.setAttribute('aria-label', 'جاري تحميل الصفحة');
+	loader.innerHTML = '<div class="loader-content"><div class="loader-brand"><div class="loader-orbit loader-orbit-one"></div><div class="loader-orbit loader-orbit-two"></div><div class="loader-mark"><i class="fa-solid fa-code"></i></div></div><div class="loader-copy"><strong>اسلام</strong><span>نصنع تجارب رقمية مميزة</span></div><div class="loader-progress"><i></i></div></div>';
+	document.body.prepend(loader);
+
+	const hideLoader = () => window.setTimeout(() => loader.classList.add('is-hidden'), 420);
+	if (document.readyState === 'complete') hideLoader();
+	else window.addEventListener('load', hideLoader, { once: true });
+
+	document.querySelectorAll('a[href]').forEach((link) => {
+		const target = link.getAttribute('href');
+		if (!target || target.startsWith('#') || target.startsWith('mailto:') || target.startsWith('tel:') || link.target === '_blank') return;
+		const destination = new URL(target, window.location.href);
+		if (destination.origin !== window.location.origin) return;
+		link.addEventListener('click', (event) => {
+			if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+			event.preventDefault();
+			loader.classList.remove('is-hidden');
+			window.setTimeout(() => { window.location.href = destination.href; }, 300);
+		});
+	});
+}
+
 function setupCustomCursor() {
 	if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
@@ -627,12 +653,14 @@ const preferredLanguage = localStorage.getItem('preferredLanguage') || 'ar';
 const preferredTheme = localStorage.getItem('preferredTheme') || 'light';
 if (document.readyState === 'loading') {
 	document.addEventListener('DOMContentLoaded', () => {
+		setupPageLoader();
 		setLanguage(preferredLanguage);
 		applyTheme(preferredTheme);
 		setupContactForm();
 		setupCustomCursor();
 	});
 } else {
+	setupPageLoader();
 	setLanguage(preferredLanguage);
 	applyTheme(preferredTheme);
 	setupContactForm();
