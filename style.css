@@ -2256,7 +2256,6 @@ body.dark .success-message {
         transform-origin: 12px 12px;
         transition: opacity .2s ease, transform .12s ease;
         filter: drop-shadow(0 5px 8px rgba(91, 48, 190, .3));
-        mix-blend-mode: multiply;
     }
 
     .custom-cursor.is-visible {

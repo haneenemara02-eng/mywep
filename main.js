@@ -289,10 +289,33 @@ function setupCustomCursor() {
 
 	const cursor = document.createElement('img');
 	cursor.className = 'custom-cursor';
-	cursor.src = 'images/2knecsdAnnQSvUbkUpnYKoUO-uGTBxZqTpuv8qwBhv7uxzJjv7M2lcOW_ZuDSd-TSebyEdh5hu_qEN8lWwWDtvaO_O7UFbfP2cmKj4Hsnwf5-LdWvz2Zs5PSCWSKuq_tuRm9LxRWATXgYzF7Jt2mIFF23mcqssjc382VEgXifzkRoJBm9YnMz8CYv0bUx8JS.jpg';
 	cursor.alt = '';
 	document.body.appendChild(cursor);
 	document.body.classList.add('custom-cursor-enabled');
+
+	const source = new Image();
+	source.src = 'images/2knecsdAnnQSvUbkUpnYKoUO-uGTBxZqTpuv8qwBhv7uxzJjv7M2lcOW_ZuDSd-TSebyEdh5hu_qEN8lWwWDtvaO_O7UFbfP2cmKj4Hsnwf5-LdWvz2Zs5PSCWSKuq_tuRm9LxRWATXgYzF7Jt2mIFF23mcqssjc382VEgXifzkRoJBm9YnMz8CYv0bUx8JS.jpg';
+	source.onload = () => {
+		const canvas = document.createElement('canvas');
+		canvas.width = source.naturalWidth;
+		canvas.height = source.naturalHeight;
+		const context = canvas.getContext('2d');
+		if (!context) return;
+
+		context.drawImage(source, 0, 0);
+		const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+		for (let index = 0; index < imageData.data.length; index += 4) {
+			const red = imageData.data[index];
+			const green = imageData.data[index + 1];
+			const blue = imageData.data[index + 2];
+			const brightest = Math.max(red, green, blue);
+			const darkest = Math.min(red, green, blue);
+			if (brightest > 145 && brightest - darkest < 45) imageData.data[index + 3] = 0;
+		}
+
+		context.putImageData(imageData, 0, 0);
+		cursor.src = canvas.toDataURL('image/png');
+	};
 
 	document.addEventListener('mousemove', (event) => {
 		cursor.style.left = `${event.clientX}px`;
