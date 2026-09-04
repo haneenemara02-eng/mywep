@@ -284,6 +284,30 @@ const translations = {
 const languageToggle = document.querySelector('#language-toggle');
 const themeToggle = document.querySelector('#theme-toggle');
 
+function setupCustomCursor() {
+	if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+	const cursor = document.createElement('img');
+	cursor.className = 'custom-cursor';
+	cursor.src = 'images/2knecsdAnnQSvUbkUpnYKoUO-uGTBxZqTpuv8qwBhv7uxzJjv7M2lcOW_ZuDSd-TSebyEdh5hu_qEN8lWwWDtvaO_O7UFbfP2cmKj4Hsnwf5-LdWvz2Zs5PSCWSKuq_tuRm9LxRWATXgYzF7Jt2mIFF23mcqssjc382VEgXifzkRoJBm9YnMz8CYv0bUx8JS.jpg';
+	cursor.alt = '';
+	document.body.appendChild(cursor);
+	document.body.classList.add('custom-cursor-enabled');
+
+	document.addEventListener('mousemove', (event) => {
+		cursor.style.left = `${event.clientX}px`;
+		cursor.style.top = `${event.clientY}px`;
+		cursor.classList.add('is-visible');
+	});
+
+	document.addEventListener('mouseleave', () => cursor.classList.remove('is-visible'));
+	document.addEventListener('mouseenter', () => cursor.classList.add('is-visible'));
+	document.querySelectorAll('a, button, input, textarea').forEach((element) => {
+		element.addEventListener('mouseenter', () => cursor.classList.add('is-hovering'));
+		element.addEventListener('mouseleave', () => cursor.classList.remove('is-hovering'));
+	});
+}
+
 const setHTML = (selector, value, index) => {
 	const elements = document.querySelectorAll(selector);
 	if (!elements.length) return;
@@ -583,9 +607,11 @@ if (document.readyState === 'loading') {
 		setLanguage(preferredLanguage);
 		applyTheme(preferredTheme);
 		setupContactForm();
+		setupCustomCursor();
 	});
 } else {
 	setLanguage(preferredLanguage);
 	applyTheme(preferredTheme);
 	setupContactForm();
+	setupCustomCursor();
 }

@@ -2232,3 +2232,38 @@ body.dark .success-card h1 {
 body.dark .success-message {
     color: var(--text-soft);
 }
+
+@media (hover: hover) and (pointer: fine) {
+    body.custom-cursor-enabled,
+    body.custom-cursor-enabled a,
+    body.custom-cursor-enabled button,
+    body.custom-cursor-enabled input,
+    body.custom-cursor-enabled textarea {
+        cursor: none;
+    }
+
+    .custom-cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 24px;
+        height: 24px;
+        pointer-events: none;
+        object-fit: contain;
+        z-index: 2000;
+        opacity: 0;
+        transform: translate(-4px, -4px) rotate(-8deg);
+        transform-origin: 12px 12px;
+        transition: opacity .2s ease, transform .12s ease;
+        filter: drop-shadow(0 5px 8px rgba(91, 48, 190, .3));
+        mix-blend-mode: multiply;
+    }
+
+    .custom-cursor.is-visible {
+        opacity: 1;
+    }
+
+    .custom-cursor.is-hovering {
+        transform: translate(-4px, -4px) rotate(-8deg) scale(1.12);
+    }
+}
