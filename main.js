@@ -357,6 +357,16 @@ function setupCustomCursor() {
 	});
 }
 
+function setupBackToTop() {
+	const button = document.querySelector('#back-to-top');
+	if (!button) return;
+
+	const updateVisibility = () => button.classList.toggle('is-visible', window.scrollY > 420);
+	window.addEventListener('scroll', updateVisibility, { passive: true });
+	updateVisibility();
+	button.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
+
 const setHTML = (selector, value, index) => {
 	const elements = document.querySelectorAll(selector);
 	if (!elements.length) return;
@@ -658,6 +668,7 @@ if (document.readyState === 'loading') {
 		applyTheme(preferredTheme);
 		setupContactForm();
 		setupCustomCursor();
+		setupBackToTop();
 	});
 } else {
 	setupPageLoader();
@@ -665,4 +676,5 @@ if (document.readyState === 'loading') {
 	applyTheme(preferredTheme);
 	setupContactForm();
 	setupCustomCursor();
+	setupBackToTop();
 }
